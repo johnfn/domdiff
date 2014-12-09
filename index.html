@@ -1,0 +1,52 @@
+<html>
+  <head>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+    <script language="javascript">
+      var domdiff = function(one, two) {
+        var contents1 = one.contents(), contents2 = two.contents();
+
+        for (var i = 0; i < contents1.length; i++) {
+          if (contents1[0].nodeType == 3 && (contents1.eq(0).text() !== contents2.eq(0).text())) {
+            contents1.eq(0).replaceWith(contents2.eq(0).text());
+          }
+        }
+
+        for (var i = 0; i < contents1.length; i++) {
+          if (contents1[i].nodeType !== 3) {
+            domdiff(contents1.eq(i), contents2.eq(i))
+          }
+        }
+      };
+
+      $(function() {
+        $('.diff').on('click', function() {
+          domdiff($('.before'), $('.after'));
+        });
+      });
+
+      // $("div").contents().filter(function(){ return this.nodeType == 3; }).first().replaceWith("change text");
+
+     </script>
+  </head>
+  <body>
+
+    <b> Before: </b>
+
+    <div class="before">
+        a
+        <div class='one'> b </div>
+        <div> c <div> d </div> </div>
+    </div>
+
+    <b> After: </b>
+
+    <div class="after">
+        b
+        <div> b </div>
+        <div> c <div> e </div></div>
+    </div>
+
+    <input type="button" value="change before DOM to after DOM" class="diff" />
+  </body>
+</html>
